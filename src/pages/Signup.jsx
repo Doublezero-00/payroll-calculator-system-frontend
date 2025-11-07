@@ -22,9 +22,10 @@ export default function Signup() {
       })
       .then(() => {
         toast.success("User registered successfully");
-        navigate("/login");
+        setTimeout(() => navigate("/login"), 1500);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error);
         toast.error("Error registering user");
       });
   };

@@ -20,8 +20,17 @@ export default function Login() {
         password: password,
       })
       .then((res) => {
+        console.log(res);
         toast.success("Login successful");
-        navigate("/home");
+        localStorage.setItem("token", res.data.data.token);
+        const user = res.data.user;
+        if(user.role === 1) {
+          setTimeout(() => navigate("/admin"), 1500);
+        }else {
+          setTimeout(() => navigate("/home"), 1500);
+        }
+        
+
       })
       .catch((error) => {
         toast.error("Login failed");
