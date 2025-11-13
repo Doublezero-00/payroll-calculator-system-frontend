@@ -1,30 +1,58 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import toast from 'react-hot-toast';
-import { BiEdit } from 'react-icons/bi';
-import { FiDelete } from 'react-icons/fi';
-import { FaCalculator } from 'react-icons/fa';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { BiEdit } from "react-icons/bi";
+import { FiDelete } from "react-icons/fi";
+import { FaCalculator } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 export default function AdminPage() {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    axios.get(`${backendUrl}/api/auth/all-users`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((res) => {
-      const users_data = res.data.usersData;
-      setUsers(users_data);
-    })
-    .catch(() => {
-      toast.error("Can't fetch users");
-    })
+    axios
+      .get(`${backendUrl}/api/auth/all-users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        const users_data = res.data.usersData || [];
+        setUsers(users_data);
+      })
+      .catch(() => {
+        toast.error("Can't fetch users");
+        setUsers([]);
+      });
   }, []);
+
+  async function DeleteUser(key) {
+    try {
+      const token = localStorage.getItem("token");
+
+      axios
+        .delete(`${backendUrl}/api/auth/delete/${key}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setUsers(users.filter((user) => user.id !== key));
+          toast.success("User deleted successfully");
+        })
+        .catch(() => {
+          toast.error("Can't delete user");
+        });
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
@@ -41,33 +69,46 @@ export default function AdminPage() {
         </thead>
 
         <tbody>
-          {users.filter((user) => user.role === 2).map((user) => (
-            <tr key={user.id} className="border-b hover:bg-gray-50 transition">
-              <td className="p-3">{user.id}</td>
-              <td className="p-3 capitalize">{user.name}</td>
-              <td className="p-3">{user.email}</td>
-              <td className="p-3 flex gap-3">
+          {users
+            .map((user) => (
+              <tr
+                key={user.id}
+                className="border-b hover:bg-gray-50 transition"
+              >
+                <td className="p-3">{user.id}</td>
+                <td className="p-3 capitalize">{user.name}</td>
+                <td className="p-3">{user.email}</td>
+                <td className="p-3 flex gap-3">
+                  <button
+                    onClick={() => navigate("/admin/users/edit", { state: {user} })}
+                    className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                  >
+                    <BiEdit size={18} />
+                    <span>Edit</span>
+                  </button>
 
-                <button className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition">
-                  <BiEdit size={18} />
-                  <span>Edit</span>
-                </button>
+                  <button
+                    className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    onClick={() => DeleteUser(user.id)}
+                  >
+                    <MdDelete size={18} />
+                    <span>Delete</span>
+                  </button>
 
-                <button className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">
-                  <FiDelete size={18} />
-                  <span>Delete</span>
-                </button>
-
-                <button className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-                  <FaCalculator size={18} />
-                  <span>Calculate Salary</span>
-                </button>
-
-              </td>
-            </tr>
-          ))}
+                  {
+                    user.role === 2 && (
+                      <button onClick={() => navigate("/admin/users/calculate-salary", { state: {user} })} className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                        <FaCalculator size={18} />
+                        <span>Calculate Salary</span>
+                      </button>
+                    )
+                  }
+                  
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }

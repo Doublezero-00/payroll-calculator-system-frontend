@@ -25,9 +25,9 @@ export default function Login() {
         localStorage.setItem("token", res.data.data.token);
         const user = res.data.user;
         if(user.role === 1) {
-          setTimeout(() => navigate("/admin"), 1500);
+          setTimeout(() => navigate("/admin"), 1000);
         }else {
-          setTimeout(() => navigate("/home"), 1500);
+          setTimeout(() => navigate("/home"), 1000);
         }
         
 

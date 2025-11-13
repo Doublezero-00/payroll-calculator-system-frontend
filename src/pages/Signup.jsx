@@ -22,7 +22,7 @@ export default function Signup() {
       })
       .then(() => {
         toast.success("User registered successfully");
-        setTimeout(() => navigate("/login"), 1500);
+        setTimeout(() => navigate("/login"), 1000);
       })
       .catch((error) => {
         console.log(error);
