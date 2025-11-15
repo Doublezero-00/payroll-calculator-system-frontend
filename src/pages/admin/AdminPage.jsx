@@ -1,114 +1,55 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { BiEdit } from "react-icons/bi";
-import { FiDelete } from "react-icons/fi";
-import { FaCalculator } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { AiOutlineLineChart } from 'react-icons/ai';
+import { CiMoneyCheck1 } from 'react-icons/ci';
+import { FaRegUser } from 'react-icons/fa';
+import { useLocation, Outlet } from 'react-router-dom';
+import ManageUsers from './manageUsers';
 
 export default function AdminPage() {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
+  const [activePanel, setActivePanel] = useState('dashboard');
+  const location = useLocation();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const navItems = [
+    { name: 'Dashboard', icon: <AiOutlineLineChart />, key: 'dashboard' },
+    { name: 'Manage Users', icon: <FaRegUser />, key: 'users' },
+    { name: 'Salaries', icon: <CiMoneyCheck1 />, key: 'salaries' },
+  ];
 
-    axios
-      .get(`${backendUrl}/api/auth/all-users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        const users_data = res.data.usersData || [];
-        setUsers(users_data);
-      })
-      .catch(() => {
-        toast.error("Can't fetch users");
-        setUsers([]);
-      });
-  }, []);
-
-  async function DeleteUser(key) {
-    try {
-      const token = localStorage.getItem("token");
-
-      axios
-        .delete(`${backendUrl}/api/auth/delete/${key}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setUsers(users.filter((user) => user.id !== key));
-          toast.success("User deleted successfully");
-        })
-        .catch(() => {
-          toast.error("Can't delete user");
-        });
-    } catch (error) {
-      toast.error("Something went wrong");
+  const renderMainContent = () => {
+    switch (activePanel) {
+      case 'users':
+        return <ManageUsers />;
+      case 'salaries':
+        return <div>Salaries component</div>
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">All Users</h1>
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-blue-600 text-white flex flex-col shadow-lg">
+        <div className="h-16 flex items-center justify-center text-2xl font-bold tracking-wide border-b border-blue-500">
+          Admin Panel
+        </div>
 
-      <table className="w-full max-w-5xl border-collapse bg-white rounded-lg shadow-md overflow-hidden">
-        <thead className="bg-blue-600 text-white">
-          <tr>
-            <th className="p-3 text-left">Id</th>
-            <th className="p-3 text-left">Name</th>
-            <th className="p-3 text-left">Email</th>
-            <th className="p-3 text-left">Actions</th>
-          </tr>
-        </thead>
+        <nav className="flex-1 px-4 py-6 space-y-2">
+          {navItems.map((item) => (
+            <button key={item.key} onClick={() => setActivePanel(item.key)} className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg text-lg font-medium transition-colors text-left ${
+              activePanel === item.key ? 'bg-blue-800' : 'hover: bg-blue-500'
+            }`}> 
+              {item.icon}
+              {item.name}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-        <tbody>
-          {users
-            .map((user) => (
-              <tr
-                key={user.id}
-                className="border-b hover:bg-gray-50 transition"
-              >
-                <td className="p-3">{user.id}</td>
-                <td className="p-3 capitalize">{user.name}</td>
-                <td className="p-3">{user.email}</td>
-                <td className="p-3 flex gap-3">
-                  <button
-                    onClick={() => navigate("/admin/users/edit", { state: {user} })}
-                    className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                  >
-                    <BiEdit size={18} />
-                    <span>Edit</span>
-                  </button>
-
-                  <button
-                    className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                    onClick={() => DeleteUser(user.id)}
-                  >
-                    <MdDelete size={18} />
-                    <span>Delete</span>
-                  </button>
-
-                  {
-                    user.role === 2 && (
-                      <button onClick={() => navigate("/admin/users/calculate-salary", { state: {user} })} className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-                        <FaCalculator size={18} />
-                        <span>Calculate Salary</span>
-                      </button>
-                    )
-                  }
-                  
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {/* Main Content */}
+      <main className="flex-1 p-8">
+        <div className="bg-white rounded-lg shadow-md p-6 min-h-[80vh]">
+          {renderMainContent()}
+        </div>
+      </main>
     </div>
   );
 }
