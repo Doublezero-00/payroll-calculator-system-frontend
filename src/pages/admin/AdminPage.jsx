@@ -5,6 +5,7 @@ import { FaRegUser } from 'react-icons/fa';
 import { useLocation, Outlet } from 'react-router-dom';
 import ManageUsers from './manageUsers';
 import UserSalaries from './userSalaries';
+import AdminDashboard from './adminDashboard';
 
 export default function AdminPage() {
   const [activePanel, setActivePanel] = useState('dashboard');
@@ -18,7 +19,9 @@ export default function AdminPage() {
 
   const renderMainContent = () => {
     switch (activePanel) {
-      case 'users':
+      case 'dashboard':
+        return <AdminDashboard />;
+      case 'users': 
         return <ManageUsers />;
       case 'salaries':
         return <UserSalaries />;
