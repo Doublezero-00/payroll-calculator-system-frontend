@@ -4,6 +4,7 @@ import { CiMoneyCheck1 } from 'react-icons/ci';
 import { FaRegUser } from 'react-icons/fa';
 import { useLocation, Outlet } from 'react-router-dom';
 import ManageUsers from './manageUsers';
+import UserSalaries from './userSalaries';
 
 export default function AdminPage() {
   const [activePanel, setActivePanel] = useState('dashboard');
@@ -12,7 +13,7 @@ export default function AdminPage() {
   const navItems = [
     { name: 'Dashboard', icon: <AiOutlineLineChart />, key: 'dashboard' },
     { name: 'Manage Users', icon: <FaRegUser />, key: 'users' },
-    { name: 'Salaries', icon: <CiMoneyCheck1 />, key: 'salaries' },
+    { name: 'Manage Salaries', icon: <CiMoneyCheck1 />, key: 'salaries' },
   ];
 
   const renderMainContent = () => {
@@ -20,7 +21,7 @@ export default function AdminPage() {
       case 'users':
         return <ManageUsers />;
       case 'salaries':
-        return <div>Salaries component</div>
+        return <UserSalaries />;
     }
   }
 

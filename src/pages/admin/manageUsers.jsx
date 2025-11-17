@@ -20,6 +20,7 @@ export default function ManageUsers() {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        toast.success("Users fetched successfully");
         const users_data = res.data.usersData || [];
         setUsers(users_data);
       })
@@ -61,7 +62,7 @@ export default function ManageUsers() {
 
   return (
     <div className="min-h-screen">
-      <h1 className="items-center text-3xl font-bold mb-6 text-gray-800">All Users</h1>
+      <h1 className="flex justify-center items-center text-3xl font-bold mb-6 text-gray-800">All Users</h1>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse bg-white rounded-lg shadow-md overflow-hidden">
