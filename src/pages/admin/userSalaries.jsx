@@ -38,6 +38,22 @@ export default function UserSalaries() {
     );
   }
 
+  async function handleSalaryDelete(id) {
+    const token = localStorage.getItem("token");
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+    await axios.delete(`${backendUrl}/api/salary/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      toast.success("Salary deleted successfully");
+      setSalaries(salaries.filter((salary) => salary.id !== id));
+    }).catch((err) => {
+      toast.error("Can't delete salary");
+    });
+  }
+
   return (
     <div className="h-screen w-full p-4">
       <div>
@@ -74,7 +90,7 @@ export default function UserSalaries() {
                         <BiEdit size={18} />
                         Edit
                       </button>
-                      <button className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">
+                      <button onClick={() => handleSalaryDelete(salary.id)} className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">
                         <MdDelete size={18} />
                         Delete
                       </button>
