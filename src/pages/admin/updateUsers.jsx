@@ -1,16 +1,16 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 export default function UpdateUsers() {
     const location = useLocation();
     const user = location.state?.user || {};
+    const navigate = useNavigate();
 
   const [id, setId] = useState(user.id || "");
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email || "");
   const [role, setRole] = useState(user.role || "");
-  const navigate = useNavigate();
 
   async function handleUpdateUser(id) {
     try {

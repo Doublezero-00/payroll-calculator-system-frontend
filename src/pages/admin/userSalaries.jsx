@@ -4,11 +4,13 @@ import toast from 'react-hot-toast';
 import { BiEdit } from 'react-icons/bi';
 import { HiOutlineDocumentReport } from 'react-icons/hi';
 import { MdDelete } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserSalaries() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [salaries, setSalaries] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -86,7 +88,7 @@ export default function UserSalaries() {
                     <td className="p-3">{salary.overtime_rate}</td>
                     <td className="p-3">{salary.net_salary}</td>
                     <td className="p-3 flex gap-2">
-                      <button className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition">
+                      <button onClick={() => navigate('/admin/salaries/edit', {state: {salary} })} className="flex items-center gap-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition">
                         <BiEdit size={18} />
                         Edit
                       </button>
