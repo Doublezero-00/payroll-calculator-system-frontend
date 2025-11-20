@@ -10,6 +10,7 @@ import CalculateUserSalary from './pages/admin/calculateUserSalary.jsx'
 import ManageUsers from './pages/admin/manageUsers.jsx'
 import UserSalaries from './pages/admin/userSalaries.jsx'
 import UpdateSalary from './pages/admin/updateSalary.jsx'
+import ReportPreview from './pages/admin/ReportPreview.jsx'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin/users/calculate-salary" element={<CalculateUserSalary />} />
           <Route path="/admin/salaries" element={<UserSalaries />}/>
           <Route path="/admin/salaries/edit" element={<UpdateSalary />}/>
+          <Route path="/admin/report-preview" element={<ReportPreview />}/>
 
         </Routes>
         <Toaster position="top-right" reverseOrder={false} />

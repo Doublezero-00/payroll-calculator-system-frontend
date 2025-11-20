@@ -96,7 +96,7 @@ export default function UserSalaries() {
                         <MdDelete size={18} />
                         Delete
                       </button>
-                      <button className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                      <button className="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition" onClick={() => navigate("/admin/report-preview", {state: {salaryId: salary.id}})}>
                         <HiOutlineDocumentReport size={18} />
                         Generate Report
                       </button>
