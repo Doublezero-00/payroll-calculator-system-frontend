@@ -11,6 +11,8 @@ import ManageUsers from './pages/admin/manageUsers.jsx'
 import UserSalaries from './pages/admin/userSalaries.jsx'
 import UpdateSalary from './pages/admin/updateSalary.jsx'
 import ReportPreview from './pages/admin/ReportPreview.jsx'
+import Profile from './pages/Profile.jsx'
+import Report from './pages/Report.jsx'
 
 function App() {
 
@@ -21,6 +23,8 @@ function App() {
           <Route path="/" element={<Home />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
+          <Route path="/profile" element={<Profile />}/>
+          <Route path="/report" element={<Report />}/>
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/users" element={<ManageUsers />} />
           <Route path="/admin/users/edit" element={<UpdateUsers />} />
