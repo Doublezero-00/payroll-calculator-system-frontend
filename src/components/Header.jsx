@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 
-export default function Header() {
+export default function Header(props) {
   const [token, setToken] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -13,7 +11,7 @@ export default function Header() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
-    navigate("/login"); // redirect to login after logout
+    props.setActivePanel('login');
   };
 
   return (
@@ -32,23 +30,50 @@ export default function Header() {
       />
 
       <nav className="hidden md:flex gap-8 mx-auto text-lg font-medium">
-        <Link to="/" className="hover:text-blue-200 transition-colors hover:underline underline-offset-4">Home</Link>
-        <Link to="/profile" className="hover:text-blue-200 transition-colors hover:underline underline-offset-4">Profile</Link>
-        <Link to="/report" className="hover:text-blue-200 transition-colors hover:underline underline-offset-4">Report</Link>
+        <button 
+          onClick={() => props.setActivePanel('home')}
+          className="hover:text-blue-200 transition-colors hover:underline underline-offset-4"
+        >
+          Home
+        </button>
+
+        <button 
+          onClick={() => props.setActivePanel('profile')}
+          className="hover:text-blue-200 transition-colors hover:underline underline-offset-4"
+        >
+          Profile
+        </button>
+
+        <button 
+          onClick={() => props.setActivePanel('report')}
+          className="hover:text-blue-200 transition-colors hover:underline underline-offset-4"
+        >
+          Report
+        </button>
       </nav>
 
       <div className="hidden md:flex gap-4 absolute right-6">
         {!token ? (
           <>
-            <Link to="/login" className="
-              px-4 py-1 rounded-lg bg-white text-blue-600 font-semibold
-              shadow-sm hover:bg-blue-100 transition-all
-            ">Login</Link>
+            <button
+              onClick={() => props.setActivePanel('login')}
+              className="
+                px-4 py-1 rounded-lg bg-white text-blue-600 font-semibold
+                shadow-sm hover:bg-blue-100 transition-all
+              "
+            >
+              Login
+            </button>
 
-            <Link to="/signup" className="
-              px-4 py-1 rounded-lg bg-green-400 text-white font-semibold
-              shadow-md hover:bg-green-500 transition-all
-            ">Register</Link>
+            <button
+              onClick={() => props.setActivePanel('signup')}
+              className="
+                px-4 py-1 rounded-lg bg-green-400 text-white font-semibold
+                shadow-md hover:bg-green-500 transition-all
+              "
+            >
+              Register
+            </button>
           </>
         ) : (
           <button 

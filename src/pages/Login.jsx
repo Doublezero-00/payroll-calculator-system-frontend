@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -23,14 +23,13 @@ export default function Login() {
         console.log(res);
         toast.success("Login successful");
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("role", res.data.user.role);
         const user = res.data.user;
-        if(user.role === 1) {
+        if (user.role === 1) {
           setTimeout(() => navigate("/admin"), 1000);
-        }else {
-          setTimeout(() => navigate("/"), 1000);
+        } else {
+          setTimeout(() => props.setActivePanel("home"), 1000);
         }
-        
-
       })
       .catch((error) => {
         console.log(error);

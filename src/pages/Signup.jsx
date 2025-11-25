@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function Signup() {
+export default function Signup(props) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,7 @@ export default function Signup() {
       })
       .then(() => {
         toast.success("User registered successfully");
-        setTimeout(() => navigate("/login"), 1000);
+        setTimeout(() => props.setActivePanel("login"), 1000);
       })
       .catch((error) => {
         console.log(error);

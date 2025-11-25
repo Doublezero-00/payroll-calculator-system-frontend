@@ -6,6 +6,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 import ManageUsers from './manageUsers';
 import UserSalaries from './userSalaries';
 import AdminDashboard from './adminDashboard';
+import Unauthorized from '../../components/Unauthorized';
 
 export default function AdminPage() {
   const [activePanel, setActivePanel] = useState('dashboard');
@@ -26,6 +27,12 @@ export default function AdminPage() {
       case 'salaries':
         return <UserSalaries />;
     }
+  }
+
+  const role = localStorage.getItem("role");
+
+  if(role !== 1) {
+    return <Unauthorized />;
   }
 
   return (
