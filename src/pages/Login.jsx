@@ -22,17 +22,18 @@ export default function Login() {
       .then((res) => {
         console.log(res);
         toast.success("Login successful");
-        localStorage.setItem("token", res.data.data.token);
+        localStorage.setItem("token", res.data.token);
         const user = res.data.user;
         if(user.role === 1) {
           setTimeout(() => navigate("/admin"), 1000);
         }else {
-          setTimeout(() => navigate("/home"), 1000);
+          setTimeout(() => navigate("/"), 1000);
         }
         
 
       })
       .catch((error) => {
+        console.log(error);
         toast.error("Login failed");
       });
   }
