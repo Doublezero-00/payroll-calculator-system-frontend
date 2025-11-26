@@ -16,6 +16,7 @@ export default function AdminPage() {
     { name: 'Dashboard', icon: <AiOutlineLineChart />, key: 'dashboard' },
     { name: 'Manage Users', icon: <FaRegUser />, key: 'users' },
     { name: 'Manage Salaries', icon: <CiMoneyCheck1 />, key: 'salaries' },
+    { name: 'Logout', icon: <FaRegUser />, key: 'logout' },
   ];
 
   const renderMainContent = () => {
@@ -26,8 +27,6 @@ export default function AdminPage() {
         return <ManageUsers />;
       case 'salaries':
         return <UserSalaries />;
-      case 'logout':
-        return 
     }
   }
 
@@ -35,6 +34,11 @@ export default function AdminPage() {
 
   if(role !== 1) {
     return <Unauthorized />;
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = '/login'; 
   }
 
   return (
@@ -47,7 +51,7 @@ export default function AdminPage() {
 
         <nav className="flex-1 px-4 py-6 space-y-2">
           {navItems.map((item) => (
-            <button key={item.key} onClick={() => setActivePanel(item.key)} className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg text-lg font-medium transition-colors text-left ${
+            <button key={item.key} onClick={() =>{if(item.key === 'logout') {handleLogout();} else {setActivePanel(item.key)} } } className={`flex items-center gap-3 w-full px-4 py-3 rounded-lg text-lg font-medium transition-colors text-left ${
               activePanel === item.key ? 'bg-blue-800' : 'hover: bg-blue-500'
             }`}> 
               {item.icon}
