@@ -26,10 +26,12 @@ export default function AdminPage() {
         return <ManageUsers />;
       case 'salaries':
         return <UserSalaries />;
+      case 'logout':
+        return 
     }
   }
 
-  const role = localStorage.getItem("role");
+  const role = Number(localStorage.getItem("role"));
 
   if(role !== 1) {
     return <Unauthorized />;
@@ -37,7 +39,7 @@ export default function AdminPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
+
       <aside className="w-64 bg-blue-600 text-white flex flex-col shadow-lg">
         <div className="h-16 flex items-center justify-center text-2xl font-bold tracking-wide border-b border-blue-500">
           Admin Panel
@@ -55,7 +57,6 @@ export default function AdminPage() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-8">
         <div className="bg-white rounded-lg shadow-md p-6 min-h-[80vh]">
           {renderMainContent()}
